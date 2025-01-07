@@ -1,4 +1,5 @@
 @import com.github.khakers.modmailviewer.auth.UserToken
+@import com.github.khakers.modmailviewer.util.QueryParamUtil
 @import com.github.khakers.modmailviewer.data.MessageType
 @import com.github.khakers.modmailviewer.util.DiscordUtils
 @import io.javalin.http.Context
@@ -47,12 +48,17 @@
                     @endif
                     <span>Created by:</span>
                     @template.macros.username(user = modmailLog.getCreator())
+                    <a class="badge rounded-pill text-bg-warning fs-6 "
+                        up-target=".content" up-follow
+                        up-transition="cross-fade"
+                        href="/?userId=${modmailLog.getCreator().id()}">
+                        User's other threads
+                    </a>
                     <span>on <span class="text-muted text-nowrap"
                                    data-timestamp="${modmailLog.getCreationTime().toString()}"
                                    data-timestamp-type="detailed"></span></span>
                     ·
                     <span>${modmailLog.getMessages().size()} messages</span>
-
                 </div>
             </div>
         </div>

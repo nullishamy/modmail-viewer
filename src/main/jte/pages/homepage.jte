@@ -10,7 +10,6 @@
 
 @param Context ctx
 
-
 @param java.util.List<com.github.khakers.modmailviewer.data.ModMailLogEntry> logEntries
 
 @param int page
@@ -20,6 +19,7 @@
 @param TicketStatus ticketStatusFilter
 @param boolean showNSFW
 @param String search
+@param String userId
 
 <!doctype html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
@@ -67,6 +67,18 @@
                     </div>
                     <div class="col-xl-8 col-sm-12 pt-2 py-xl-0">
                         <div id="SearchBox" class="input-group px-xl-0 px-sm-2">
+                            <button class="btn btn-outline-danger" type="button" id="ClearUserQueryButton"><i
+                                        class="bi bi-x-lg"></i> Reset
+                            </button>
+                            <input id="UserSearchBoxInput" type="search" class="form-control" placeholder="Search by user"
+                                   aria-label="Search Text" aria-describedby="SearchButton" value="${userId}">
+                            <button class="btn btn-outline-primary" type="button" id="UserSearchButton"><i
+                                        class="bi bi-search"></i> Search
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-xl-8 col-sm-12 pt-2 py-xl-0">
+                        <div id="UserSearchBox" class="input-group px-xl-0 px-sm-2">
                             <button class="btn btn-outline-danger" type="button" id="ClearSearchButton"><i
                                         class="bi bi-x-lg"></i> Reset
                             </button>

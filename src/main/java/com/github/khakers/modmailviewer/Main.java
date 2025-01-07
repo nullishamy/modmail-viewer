@@ -155,20 +155,25 @@ public class Main {
                             .check(s -> s.length() > 0 && s.length() < 120
                                     , "search text cannot be greater than 50 characters")
                             .getOrDefault("");
+                    String userIdSearch = ctx.queryParamAsClass("userId", String.class)
+                            .check(s -> s.length() > 0 && s.length() < 120
+                                    , "userId query cannot be greater than 50 characters")
+                            .getOrDefault("");
                     var ticketFilter = TicketStatus.valueOf(statusFilter.toUpperCase());
                     var pageCount = db.getPaginationCount(ticketFilter, search);
                     page = Math.min(pageCount, page);
                     ctx.render("pages/homepage.jte",
                             model(
                                     "ctx", ctx,
-                                    "logEntries", db.searchPaginatedMostRecentEntriesByMessageActivity(page, ticketFilter, search),
+                                    "logEntries", db.searchPaginatedMostRecentEntriesByMessageActivity(page, ticketFilter, search, userIdSearch),
                                     "page", page,
                                     "pageCount", pageCount,
                                     "user", authHandler != null ? AuthHandler.getUser(ctx) : new UserToken(0L, "anonymous", "0000", "", new long[]{}, false),
                                     "modMailLogDB", db,
                                     "ticketStatusFilter", ticketFilter,
                                     "showNSFW", showNSFW,
-                                    "search", search));
+                                    "search", search,
+                                    "userId", userIdSearch));
                 }, RoleUtils.atLeastSupporter())
                 .get("/logs/{id}", ctx -> {
                     var entry = db.getModMailLogEntry(ctx.pathParam("id"));

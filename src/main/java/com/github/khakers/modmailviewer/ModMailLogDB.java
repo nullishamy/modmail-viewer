@@ -181,7 +181,7 @@ public class ModMailLogDB {
      * @return
      */
     public List<ModMailLogEntry> getPaginatedMostRecentEntriesByMessageActivity(int page, int itemsPerPage, TicketStatus ticketStatus, String searchText) {
-        return searchPaginatedMostRecentEntriesByMessageActivity(page, itemsPerPage, ticketStatus, searchText);
+        return searchPaginatedMostRecentEntriesByMessageActivity(page, itemsPerPage, ticketStatus, searchText, "");
 //        ArrayList<ModMailLogEntry> entries = new ArrayList<>(itemsPerPage);
 //        var ticketFilter = switch (ticketStatus) {
 //            case ALL -> Filters.empty();
@@ -207,17 +207,23 @@ public class ModMailLogDB {
 //        return entries;
     }
 
-    public List<ModMailLogEntry> searchPaginatedMostRecentEntriesByMessageActivity(int page, TicketStatus ticketStatus, String searchkey) {
-        return searchPaginatedMostRecentEntriesByMessageActivity(page, DEFAULT_ITEMS_PER_PAGE, ticketStatus, searchkey);
+    public List<ModMailLogEntry> searchPaginatedMostRecentEntriesByMessageActivity(int page, TicketStatus ticketStatus, String searchkey, String userId) {
+        return searchPaginatedMostRecentEntriesByMessageActivity(page, DEFAULT_ITEMS_PER_PAGE, ticketStatus, searchkey, userId);
     }
 
-    public List<ModMailLogEntry> searchPaginatedMostRecentEntriesByMessageActivity(int page, int itemsPerPage, TicketStatus ticketStatus, String searchkey) {
+    public List<ModMailLogEntry> searchPaginatedMostRecentEntriesByMessageActivity(int page, int itemsPerPage, TicketStatus ticketStatus, String searchkey, String userId) {
         ArrayList<ModMailLogEntry> entries = new ArrayList<>(itemsPerPage);
         var ticketFilter = switch (ticketStatus) {
             case ALL -> Filters.empty();
             case CLOSED -> Filters.eq("open", false);
             case OPEN -> Filters.eq("open", true);
         };
+
+        if (!"".equals(userId)) {
+            logger.debug("Searching by creator ID " + userId);
+            ticketFilter = Filters.and(ticketFilter, Filters.eq("creator.id", userId));
+        }
+
         logger.debug("filtering by {} with {} and search text '{}'", ticketStatus, ticketFilter, searchkey);
         FindIterable<ModMailLogEntry> foundLogs = logCollection
                 .find()

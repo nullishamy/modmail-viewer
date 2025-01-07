@@ -18,11 +18,39 @@ up.compiler("#ClearSearchButton", function (element) {
     })
 })
 
+up.compiler("#ClearUserQueryButton", function (element) {
+    element.addEventListener('click', () => {
+        const url = window.location.href;
+        console.log(url);
+        const params = up.Params.fromURL(url);
+        params.delete('userId');
+
+        up.navigate({params: params, url: window.location.pathname});
+    })
+})
+
 up.compiler('#SearchButton', function (element) {
     element.addEventListener("click", (event) => {
         search();
     })
 })
+
+up.compiler('#UserSearchButton', function (element) {
+    element.addEventListener("click", (event) => {
+        userSearch();
+    })
+})
+
+function userSearch() {
+    const search = document.getElementById("UserSearchBoxInput").value;
+
+    const url = window.location.href;
+    console.log(url);
+    const params = up.Params.fromURL(url);
+    params.set('userId', search);
+
+    up.navigate({params: params, url: window.location.pathname});
+}
 
 
 function search() {
